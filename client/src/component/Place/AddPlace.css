@@ -1,0 +1,54 @@
+.add-place {
+  margin: 5rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.add-place__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.add-place__form label {
+  font-size: 1.5rem;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.add-place__form input {
+  border-width: 1px;
+  width: 95%;
+  font-size: 1.2rem;
+  padding: 8px;
+}
+
+.add-place__form textarea {
+  font-family: sans-serif;
+  border-width: 1px;
+  width: 100%;
+  height: 150px;
+  font-size: 1.2rem;
+  padding: 8px;
+  resize: none;
+}
+
+.add-place__form button {
+  width: 70%;
+  margin: 1rem;
+  border-width: 1px;
+  border-radius: 7px;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  color: white;
+  background-color: gray;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-place__form button:hover {
+  background-color: darkgray;
+}
