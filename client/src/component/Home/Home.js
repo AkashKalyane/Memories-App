@@ -105,13 +105,16 @@ const DUMMY_PLACE = [
   },
 ];
 
+const itemPerPage = 2;
+
 function Home() {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(DUMMY_PLACE.length / 2);
+  const totalPages = Math.ceil(DUMMY_PLACE.length / itemPerPage);
+  const [isOpen, setIsOpen] = useState(false);
 
   const paginatedPlaces = DUMMY_PLACE.slice(
-    (currentPage - 1) * 2,
-    currentPage * 2
+    (currentPage - 1) * itemPerPage,
+    currentPage * itemPerPage
   );
 
   return (
@@ -163,12 +166,19 @@ function Home() {
               </div>
             </div>
             <div className="create-button">
-              <button>Create Memory</button>
+              <button onClick={() => setIsOpen(!isOpen)}>Create Memory</button>
             </div>
           </div>
         </div>
-        <div className="right">
-          <AddPlace />
+        <div className={"right " + (isOpen && "active")}>
+          <div className={"backdrop " + (isOpen && "active")}>
+            {isOpen && (
+              <div className="cancel-button" onClick={() => setIsOpen(!isOpen)}>
+                <span className="line1"></span> <span className="line2"></span>
+              </div>
+            )}
+            <AddPlace />
+          </div>
         </div>
       </div>
     </div>
