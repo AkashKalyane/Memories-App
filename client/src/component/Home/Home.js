@@ -1,118 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
 
-import Image from "../../assets/demo1.jpg";
 import Card from "../Card/Card";
 import AddPlace from "../Place/AddPlace";
 
 import "./Home.css";
 
-const DUMMY_PLACE = [
-  {
-    id: 1,
-    title: "Taj Hotel",
-    description: "A place to visit in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 2,
-    title: "Gateway of India",
-    description: "A historic monument in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 3,
-    title: "Marine Drive",
-    description: "A popular spot in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 4,
-    title: "Haji Ali Dargah",
-    description: "A beautiful mosque in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 5,
-    title: "Elephanta Caves",
-    description: "A UNESCO World Heritage site in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 6,
-    title: "Juhu Beach",
-    description: "A famous beach in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 7,
-    title: "Siddhivinayak Temple",
-    description: "A popular Hindu temple in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 8,
-    title: "Chhatrapati Shivaji Maharaj Terminus",
-    description: "A historic railway station in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 9,
-    title: "Sanjay Gandhi National Park",
-    description: "A large protected area in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 10,
-    title: "Film City",
-    description: "The heart of Bollywood in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 11,
-    title: "Bandra-Worli Sea Link",
-    description: "A modern bridge in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 12,
-    title: "Hanging Gardens",
-    description: "A beautiful garden in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 13,
-    title: "Chor Bazaar",
-    description: "A famous market in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 14,
-    title: "Mumbai Zoo",
-    description: "Also known as Veermata Jijabai Bhosale Udyan",
-    Image: Image,
-  },
-  {
-    id: 15,
-    title: "Worli Fort",
-    description: "A historic fort in Mumbai",
-    Image: Image,
-  },
-  {
-    id: 16,
-    title: "Global Vipassana Pagoda",
-    description: "A meditation hall near Mumbai",
-    Image: Image,
-  },
-];
-
-const itemPerPage = 2;
-
 function Home() {
+  const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(DUMMY_PLACE.length / itemPerPage);
   const [isOpen, setIsOpen] = useState(false);
 
-  const paginatedPlaces = DUMMY_PLACE.slice(
+  const isMobileView = useMediaQuery({ maxWidth: 700 });
+  const itemPerPage = isMobileView ? 2 : 6;
+  const totalPages = Math.ceil(data.length / itemPerPage);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let posts;
+      try {
+        posts = await fetch("http://localhost:5000/api/posts/", {
+          method: "get",
+          "Content-Type": "Application/json",
+        });
+        const responseData = await posts.json();
+        setData(responseData.posts);
+      } catch (err) {
+        console.log("Something went wrong, while fetching data, " + err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const paginatedPlaces = data.slice(
     (currentPage - 1) * itemPerPage,
     currentPage * itemPerPage
   );
@@ -122,12 +42,12 @@ function Home() {
       <div className="home-container">
         <div className="left">
           <div className="content">
-            {paginatedPlaces.map(({ id, title, description, Image }) => (
+            {paginatedPlaces.map(({ _id, title, description, image }) => (
               <Card
-                key={id}
+                key={_id}
                 title={title}
                 description={description}
-                Image={Image}
+                Image={image}
               />
             ))}
           </div>

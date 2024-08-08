@@ -4,8 +4,8 @@ import "./AddPlace.css";
 
 function AddPlace() {
   const [createdPlace, setCreatedPlace] = useState({
-    title: null,
-    description: null,
+    title: "",
+    description: "",
   });
 
   const handleChange = (e) => {
@@ -23,8 +23,8 @@ function AddPlace() {
       console.log(createdPlace);
     }
     setCreatedPlace({
-      title: "",
-      description: "",
+      title: createdPlace.title || "",
+      description: createdPlace.description || "",
     });
   };
 
