@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/Memories-App/client/static/css/main.2032fdad.css",
+    "main.js": "/Memories-App/client/static/js/main.eeb65a6c.js",
+    "static/media/like.svg": "/Memories-App/client/static/media/like.7d89be173e045f50dfe7dada6b4d3eab.svg",
+    "index.html": "/Memories-App/client/index.html",
+    "main.2032fdad.css.map": "/Memories-App/client/static/css/main.2032fdad.css.map",
+    "main.eeb65a6c.js.map": "/Memories-App/client/static/js/main.eeb65a6c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2032fdad.css",
+    "static/js/main.eeb65a6c.js"
+  ]
+}
