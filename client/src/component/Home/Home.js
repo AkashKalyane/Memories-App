@@ -5,23 +5,26 @@ import Card from "../Card/Card";
 import AddPlace from "../Place/AddPlace";
 
 import "./Home.css";
+import CardItem from "../Card/CardItem/CardItem";
 
 function Home() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [itmeIsOpen, setItemIsOpen] = useState(false);
+  const [userId, setUserId] = useState("");
 
-  const isMobileView = useMediaQuery({ maxWidth: 700 });
-  const itemPerPage = isMobileView ? 2 : 6;
+  const isMobileView = useMediaQuery({ maxWidth: 720 });
+  const isTableView = useMediaQuery({ maxWidth: 1050 });
+  const itemPerPage = isMobileView ? 2 : isTableView ? 4 : 6;
   const totalPages = Math.ceil(data.length / itemPerPage);
 
   useEffect(() => {
     const fetchData = async () => {
       let posts;
       try {
-        posts = await fetch("http://localhost:5000/api/posts/", {
+        posts = await fetch(process.env.REACT_APP_API_KEY + "posts/", {
           method: "get",
-          "Content-Type": "Application/json",
         });
         const responseData = await posts.json();
         setData(responseData.posts);
@@ -30,7 +33,7 @@ function Home() {
       }
     };
     fetchData();
-  }, []);
+  }, [data]);
 
   const paginatedPlaces = data.slice(
     (currentPage - 1) * itemPerPage,
@@ -39,15 +42,25 @@ function Home() {
 
   return (
     <div className="home-wrapper">
-      <div className="home-container">
-        <div className="left">
+      <div className={"home-container " + (itmeIsOpen && "active")}>
+        <div className={"left "}>
+          {itmeIsOpen && (
+            <CardItem
+              itmeIsOpen={itmeIsOpen}
+              setItemIsOpen={setItemIsOpen}
+              userId={userId}
+            />
+          )}
           <div className="content">
             {paginatedPlaces.map(({ _id, title, description, image }) => (
               <Card
                 key={_id}
+                id={_id}
                 title={title}
                 description={description}
                 Image={image}
+                setItemIsOpen={setItemIsOpen}
+                setUserId={setUserId}
               />
             ))}
           </div>
@@ -97,7 +110,7 @@ function Home() {
                 <span className="line1"></span> <span className="line2"></span>
               </div>
             )}
-            <AddPlace />
+            <AddPlace data={data} />
           </div>
         </div>
       </div>

@@ -1,9 +1,7 @@
 const express = require("express");
 
 const Post = require("../models/post");
-
-const Image =
-  "https://media.istockphoto.com/id/1341288649/photo/75mpix-panorama-of-beautiful-mount-ama-dablam-in-himalayas-nepal.jpg?s=612x612&w=0&k=20&c=0xb_bb-NBIxjiJL_kqY-o3dCjv2PmKFZfRjHcVEijDc=";
+const { json } = require("body-parser");
 
 const placesRoutes = express.Router();
 const usersRoutes = express.Router();
@@ -18,6 +16,20 @@ placesRoutes.get("/", async (req, res) => {
   if (posts.length === 0)
     return res.json({ msg: "There are no posts, Please create one" });
   res.json({ posts });
+});
+
+placesRoutes.get("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  let post;
+  try {
+    post = await Post.findById(userId);
+    if (!post) {
+      return res.json({ msg: "Post does not exist for the provided id." });
+    }
+  } catch (err) {
+    return res.json({ msg: "Something went wrong, " + err });
+  }
+  res.json({ post });
 });
 
 placesRoutes.post("/", async (req, res) => {

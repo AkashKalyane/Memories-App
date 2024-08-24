@@ -2,9 +2,14 @@ import React from "react";
 
 import "./Card.css";
 
-function Card({ Image, title, description }) {
+function Card({ id, Image, title, description, setItemIsOpen, setUserId }) {
+  function handleClick() {
+    setItemIsOpen(true);
+    setUserId(id);
+  }
+
   return (
-    <div className="card">
+    <div className="card" onClick={handleClick}>
       <div className="image">
         <img src={Image} alt="sample-image" />
       </div>

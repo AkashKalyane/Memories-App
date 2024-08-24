@@ -40,18 +40,18 @@
 }
 
 .add-place__form button {
-  width: 70%;
+  width: 60%;
   margin: 1rem;
   border-width: 1px;
   border-radius: 7px;
   padding: 0.5rem;
   font-size: 1.2rem;
   color: white;
-  background-color: gray;
+  background-color: #EA4C89;
   font-weight: 600;
   cursor: pointer;
 }
 
 .add-place__form button:hover {
-  background-color: darkgray;
+  background-color: #ea4c89ac;
 }
