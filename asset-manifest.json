@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Memories-App/static/css/main.2032fdad.css",
-    "main.js": "/Memories-App/static/js/main.be04cfbe.js",
+    "main.css": "/Memories-App/static/css/main.d8e70811.css",
+    "main.js": "/Memories-App/static/js/main.43af7aae.js",
     "static/media/like.svg": "/Memories-App/static/media/like.7d89be173e045f50dfe7dada6b4d3eab.svg",
     "index.html": "/Memories-App/index.html",
-    "main.2032fdad.css.map": "/Memories-App/static/css/main.2032fdad.css.map",
-    "main.be04cfbe.js.map": "/Memories-App/static/js/main.be04cfbe.js.map"
+    "main.d8e70811.css.map": "/Memories-App/static/css/main.d8e70811.css.map",
+    "main.43af7aae.js.map": "/Memories-App/static/js/main.43af7aae.js.map"
   },
   "entrypoints": [
-    "static/css/main.2032fdad.css",
-    "static/js/main.be04cfbe.js"
+    "static/css/main.d8e70811.css",
+    "static/js/main.43af7aae.js"
   ]
 }
