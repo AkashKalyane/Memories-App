@@ -1,7 +1,9 @@
 const express = require("express");
+const cloudinary = require("cloudinary");
+const Multer = require("multer");
 
-const Post = require("../models/post");
 const { json } = require("body-parser");
+const Post = require("../models/post");
 
 const placesRoutes = express.Router();
 const usersRoutes = express.Router();
@@ -11,10 +13,11 @@ placesRoutes.get("/", async (req, res) => {
   try {
     posts = await Post.find({});
   } catch (err) {
-    res.json({ msg: "Something went wrong, " + err });
+    return res.json({ msg: "Something went wrong, " + err });
   }
-  if (posts.length === 0)
+  if (posts.length === 0) {
     return res.json({ msg: "There are no posts, Please create one" });
+  }
   res.json({ posts });
 });
 
@@ -33,7 +36,7 @@ placesRoutes.get("/:userId", async (req, res) => {
 });
 
 placesRoutes.post("/", async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, image } = req.body;
   if (!title || !description) {
     res.json({ err: "Please provided required information" });
   }
@@ -41,8 +44,7 @@ placesRoutes.post("/", async (req, res) => {
   const postCreate = new Post({
     title,
     description,
-    image:
-      "https://media.istockphoto.com/id/1341288649/photo/75mpix-panorama-of-beautiful-mount-ama-dablam-in-himalayas-nepal.jpg?s=612x612&w=0&k=20&c=0xb_bb-NBIxjiJL_kqY-o3dCjv2PmKFZfRjHcVEijDc=",
+    image,
   });
 
   try {
@@ -52,6 +54,34 @@ placesRoutes.post("/", async (req, res) => {
   }
 
   res.json({ post: postCreate });
+});
+
+const storage = new Multer.memoryStorage();
+const upload = Multer({
+  storage,
+});
+
+const handleUpload = async (file) => {
+  const res = await cloudinary.uploader.upload(file, { resource_type: "auto" });
+  return res;
+};
+
+placesRoutes.post("/upload", upload.single("my_file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send({ msg: "No file uploaded" });
+    }
+
+    const b64 = req.file.buffer.toString("base64");
+    let dataURI = `data:${req.file.mimetype};base64,${b64}`;
+
+    const cldRes = await handleUpload(dataURI);
+
+    return res.json(cldRes);
+  } catch (error) {
+    console.error("Upload Error:", error);
+    return res.status(500).send({ msg: error.message });
+  }
 });
 
 usersRoutes.get("/", (req, res) => {
