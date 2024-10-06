@@ -3,27 +3,32 @@ import { useMediaQuery } from "react-responsive";
 
 import Card from "../Card/Card";
 import AddPlace from "../Place/AddPlace";
+import CardItem from "../Card/CardItem/CardItem";
+import Loading from "../Loading/Loading";
+import Pagination from "../Pagination/Pagination";
 
 import "./Home.css";
-import CardItem from "../Card/CardItem/CardItem";
 
 function Home() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [itmeIsOpen, setItemIsOpen] = useState(false);
   const [userId, setUserId] = useState("");
 
   const isMobileView = useMediaQuery({ maxWidth: 720 });
   const isTableView = useMediaQuery({ maxWidth: 1050 });
+
   const itemPerPage = isMobileView ? 2 : isTableView ? 4 : 6;
-  const totalPages = Math.ceil(data.length / itemPerPage);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       let posts;
       try {
-        posts = await fetch(process.env.REACT_APP_API_KEY + "posts/", {
+        posts = await fetch(process.env.REACT_APP_API_KEY + "api/posts/", {
           method: "get",
         });
         const responseData = await posts.json();
@@ -33,6 +38,7 @@ function Home() {
       }
     };
     fetchData();
+    setIsLoading(false);
   }, [data]);
 
   const paginatedPlaces = data.slice(
@@ -44,60 +50,40 @@ function Home() {
     <div className="home-wrapper">
       <div className={"home-container " + (itmeIsOpen && "active")}>
         <div className={"left "}>
-          {itmeIsOpen && (
-            <CardItem
-              itmeIsOpen={itmeIsOpen}
-              setItemIsOpen={setItemIsOpen}
-              userId={userId}
-            />
-          )}
-          <div className="content">
-            {paginatedPlaces.map(({ _id, title, description, image }) => (
-              <Card
-                key={_id}
-                id={_id}
-                title={title}
-                description={description}
-                Image={image}
-                setItemIsOpen={setItemIsOpen}
-                setUserId={setUserId}
-              />
-            ))}
-          </div>
-          <div className="footer">
-            <div className="pagination">
-              <div className="items">
-                <button
-                  className="arrow"
-                  onClick={() => setCurrentPage(1)}
-                  disabled={currentPage === 1}
-                >
-                  {"<<"}
-                </button>
-                <button
-                  className="arrow"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  {"<"}
-                </button>
-                <span>{`${currentPage}/${totalPages}`}</span>
-                <button
-                  className="arrow"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  {">"}
-                </button>
-                <button
-                  className="arrow"
-                  onClick={() => setCurrentPage(totalPages)}
-                  disabled={currentPage === totalPages}
-                >
-                  {">>"}
-                </button>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {itmeIsOpen && (
+                <CardItem
+                  itmeIsOpen={itmeIsOpen}
+                  setItemIsOpen={setItemIsOpen}
+                  userId={userId}
+                />
+              )}
+              <div className="content">
+                {paginatedPlaces.map(({ _id, title, description, image }) => (
+                  <Card
+                    key={_id}
+                    id={_id}
+                    title={title}
+                    description={description}
+                    Image={image}
+                    setItemIsOpen={setItemIsOpen}
+                    setUserId={setUserId}
+                  />
+                ))}
               </div>
-            </div>
+            </>
+          )}
+
+          <div className="footer">
+            <Pagination
+              dataLength={data.length}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              itemPerPage={itemPerPage}
+            />
             <div className="create-button">
               <button onClick={() => setIsOpen(!isOpen)}>Create Memory</button>
             </div>

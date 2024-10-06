@@ -10,7 +10,7 @@ function CardItem({ itemIsOpen, setItemIsOpen, userId }) {
     async function fetchData() {
       let post;
       try {
-        post = await fetch(`${process.env.REACT_APP_API_KEY}posts/${userId}`, {
+        post = await fetch(`${process.env.REACT_APP_API_KEY}api/posts/${userId}`, {
           method: "get",
         });
         const responseData = await post.json();
